@@ -3,13 +3,17 @@ com/hotel/ReservaHotelApplication.class
 com/hotel/quartos/QuartoController.class
 com/hotel/domain/enums/TipoCama.class
 com/hotel/domain/enums/TipoQuarto.class
+com/hotel/quartos/QuartoServiceImpl.class
 com/hotel/quartos/dto/QuartoResponse.class
 com/hotel/domain/Hospede.class
+com/hotel/common/GlobalExceptionHandler.class
 com/hotel/quartos/dto/CamaDto.class
 com/hotel/quartos/dto/QuartoListagemResponse.class
 com/hotel/common/NumeroQuartoDuplicadoException.class
+com/hotel/quartos/QuartoMapper.class
 com/hotel/quartos/QuartoService.class
 com/hotel/domain/enums/StatusQuarto.class
+com/hotel/quartos/dto/StatusAlteracaoRequest.class
 com/hotel/common/QuartoNaoEncontradoException.class
 com/hotel/domain/Cama.class
 com/hotel/quartos/dto/QuartoRequest.class

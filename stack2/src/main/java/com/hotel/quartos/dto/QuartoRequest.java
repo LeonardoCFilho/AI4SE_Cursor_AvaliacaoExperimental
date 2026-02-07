@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * DTO para cadastro e edição de quarto.
@@ -34,27 +35,28 @@ public record QuartoRequest(
 
         List<@Valid CamaDto> camas
 ) {
+
     public StatusQuarto getStatusOrDefault() {
-        return status != null ? status : StatusQuarto.LIVRE;
+        return Optional.ofNullable(status).orElse(StatusQuarto.LIVRE);
     }
 
     public boolean getFrigobarOrDefault() {
-        return frigobar != null && frigobar;
+        return Boolean.TRUE.equals(frigobar);
     }
 
     public boolean getCafeManhaInclusoOrDefault() {
-        return cafeManhaIncluso != null && cafeManhaIncluso;
+        return Boolean.TRUE.equals(cafeManhaIncluso);
     }
 
     public boolean getArCondicionadoOrDefault() {
-        return arCondicionado != null && arCondicionado;
+        return Boolean.TRUE.equals(arCondicionado);
     }
 
     public boolean getTvOrDefault() {
-        return tv != null && tv;
+        return Boolean.TRUE.equals(tv);
     }
 
     public List<CamaDto> getCamasOrDefault() {
-        return camas != null ? camas : List.of();
+        return Optional.ofNullable(camas).orElse(List.of());
     }
 }

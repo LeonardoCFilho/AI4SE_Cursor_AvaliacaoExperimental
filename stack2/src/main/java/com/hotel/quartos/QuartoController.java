@@ -2,15 +2,12 @@ package com.hotel.quartos;
 
 import com.hotel.domain.enums.StatusQuarto;
 import com.hotel.quartos.dto.*;
-import com.hotel.common.NumeroQuartoDuplicadoException;
-import com.hotel.common.QuartoNaoEncontradoException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Controller REST para Gestão de Quartos.
@@ -20,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/quartos")
 public class QuartoController {
 
-    private final QuartoService service;
+    private final QuartoService service;  // DIP: depende da abstração
 
     public QuartoController(QuartoService service) {
         this.service = service;
@@ -70,31 +67,9 @@ public class QuartoController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<QuartoResponse> alterarStatus(
             @PathVariable Long id,
-            @RequestBody Map<String, String> body
+            @Valid @RequestBody StatusAlteracaoRequest request
     ) {
-        String statusStr = body.get("status");
-        if (statusStr == null || statusStr.isBlank()) {
-            return ResponseEntity.badRequest().build();
-        }
-        StatusQuarto status;
-        try {
-            status = StatusQuarto.valueOf(statusStr.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
-        QuartoResponse response = service.alterarStatus(id, status);
+        QuartoResponse response = service.alterarStatus(id, request.status());
         return ResponseEntity.ok(response);
-    }
-
-    @ExceptionHandler(QuartoNaoEncontradoException.class)
-    public ResponseEntity<Map<String, String>> handleQuartoNaoEncontrado(QuartoNaoEncontradoException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("erro", ex.getMessage()));
-    }
-
-    @ExceptionHandler(NumeroQuartoDuplicadoException.class)
-    public ResponseEntity<Map<String, String>> handleNumeroDuplicado(NumeroQuartoDuplicadoException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Map.of("erro", ex.getMessage()));
     }
 }

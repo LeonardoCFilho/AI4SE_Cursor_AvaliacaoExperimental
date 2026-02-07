@@ -9,10 +9,14 @@
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/domain/Quarto.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/domain/enums/TipoCama.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/quartos/QuartoService.java
+/home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/quartos/dto/StatusAlteracaoRequest.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/common/NumeroQuartoDuplicadoException.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/domain/Cama.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/domain/Hospede.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/domain/Reserva.java
+/home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/common/GlobalExceptionHandler.java
+/home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/quartos/QuartoMapper.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/quartos/dto/CamaDto.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/domain/enums/StatusReserva.java
 /home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/common/QuartoNaoEncontradoException.java
+/home/leonardo/Downloads/AI4SE_Cursor_AvaliacaoExperimental/stack2/src/main/java/com/hotel/quartos/QuartoServiceImpl.java
