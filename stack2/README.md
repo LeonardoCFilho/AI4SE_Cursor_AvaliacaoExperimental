@@ -8,17 +8,40 @@ Implementação do sistema de reservas utilizando Java e Spring Boot.
 stack2/
 ├── src/main/java/com/hotel/
 │   ├── ReservaHotelApplication.java
-│   └── domain/
-│       ├── Cama.java          # Entidade para camas do quarto
-│       ├── Hospede.java       # Entidade Hóspede
-│       ├── Quarto.java        # Entidade Quarto
-│       ├── Reserva.java       # Entidade Reserva
-│       └── enums/
-│           ├── StatusQuarto.java
-│           ├── StatusReserva.java
-│           ├── TipoCama.java
-│           └── TipoQuarto.java
+│   ├── common/                 # Exceções compartilhadas
+│   ├── domain/                 # Entidades JPA
+│   ├── quartos/                # Módulo Gestão de Quartos
+│   │   ├── QuartoController.java
+│   │   ├── QuartoService.java
+│   │   ├── QuartoRepository.java
+│   │   └── dto/
+│   └── ...
 └── pom.xml
+```
+
+## API REST - Gestão de Quartos
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | `/quartos` | Lista quartos (número, tipo, preço, disponibilidade, camas) |
+| GET | `/quartos/{id}` | Obtém quarto por ID |
+| POST | `/quartos` | Cadastra quarto |
+| PUT | `/quartos/{id}` | Edita quarto |
+| PATCH | `/quartos/{id}/status` | Altera status (LIVRE, OCUPADO, MANUTENCAO_LIMPEZA) |
+
+**Exemplo cadastro (POST /quartos):**
+```json
+{
+  "numero": "101",
+  "tipo": "BASICO",
+  "capacidade": 2,
+  "precoDiaria": 150.00,
+  "frigobar": true,
+  "camas": [
+    {"tipo": "SOLTEIRO"},
+    {"tipo": "CASAL_KING"}
+  ]
+}
 ```
 
 ## Entidades Implementadas

@@ -93,6 +93,17 @@ public class Quarto {
         camas.remove(cama);
     }
 
+    /**
+     * Substitui todas as camas pelas novas (para edição).
+     * Usado pelo Service ao editar quarto.
+     */
+    public void substituirCamas(List<Cama> novasCamas) {
+        camas.clear();
+        for (Cama c : novasCamas) {
+            adicionarCama(c);
+        }
+    }
+
     // getters e setters
 
     public Long getId() {
