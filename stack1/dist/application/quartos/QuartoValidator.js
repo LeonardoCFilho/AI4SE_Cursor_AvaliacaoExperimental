@@ -3,8 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuartoValidator = void 0;
 const errors_1 = require("../../domain/errors");
 /**
- * Validação de quarto (SRP).
- * Aberto para extensão: novas regras podem ser adicionadas sem alterar o Service.
+ * Validação de quarto (SRP — Single Responsibility).
+ *
+ * Decisão: Validator separado do Service para que o Service orquestre fluxos, não
+ * regras de validação. Novas regras são adicionadas aqui sem alterar QuartoService.
+ *
+ * Decisão: isUpdate para diferenciar cadastro (id não obrigatório) de edição (id obrigatório).
  */
 class QuartoValidator {
     validate(dto, isUpdate = false) {

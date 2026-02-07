@@ -2,8 +2,12 @@ import { QuartoDto } from './quartos.dto';
 import { ValidationError } from '../../domain/errors';
 
 /**
- * Validação de quarto (SRP).
- * Aberto para extensão: novas regras podem ser adicionadas sem alterar o Service.
+ * Validação de quarto (SRP — Single Responsibility).
+ *
+ * Decisão: Validator separado do Service para que o Service orquestre fluxos, não
+ * regras de validação. Novas regras são adicionadas aqui sem alterar QuartoService.
+ *
+ * Decisão: isUpdate para diferenciar cadastro (id não obrigatório) de edição (id obrigatório).
  */
 export class QuartoValidator {
   validate(dto: QuartoDto, isUpdate = false): void {

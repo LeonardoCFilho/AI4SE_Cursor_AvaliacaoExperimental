@@ -1,5 +1,6 @@
 /**
- * Tipos de quarto disponíveis no hotel.
+ * Enums definem valores conhecidos em tempo de compilação.
+ * Decisão: string enum (BASICO = 'BASICO') para serialização JSON/API sem conversão.
  */
 export enum TipoQuarto {
   BASICO = 'BASICO',

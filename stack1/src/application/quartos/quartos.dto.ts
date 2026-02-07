@@ -1,5 +1,10 @@
 import { TipoQuarto, StatusQuarto, TipoCama } from '../../domain/enums';
 
+/**
+ * DTOs desacoplam o contrato da API das entidades de domínio.
+ * Decisão: id opcional em CamaDto/QuartoDto — create não envia id; update envia.
+ * Decisão: QuartoListagemDto é subset de QuartoDto — lista não precisa de comodidades.
+ */
 export interface CamaDto {
   id?: number;
   tipo: TipoCama;

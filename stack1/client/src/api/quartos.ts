@@ -1,6 +1,7 @@
 import type { QuartoDto, QuartoListagemDto } from '../types/quartos';
 import { fetchApi } from './httpClient';
 
+/** VITE_API_URL para build; /api para dev (proxy no vite.config) */
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const listarQuartos = () =>

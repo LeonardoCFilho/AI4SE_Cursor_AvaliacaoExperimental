@@ -11,7 +11,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Composição de dependências (DIP)
+/*
+ * Composição de raiz (Composition Root) — DIP.
+ * Decisão: Construção manual aqui. Para projetos maiores, considerar container IoC.
+ * Ordem: Infra → Application (Repository → Service → Controller).
+ */
 const quartoRepo = new QuartoRepositoryEmMemoria();
 const quartoMapper = new QuartoMapper();
 const quartoValidator = new QuartoValidator();

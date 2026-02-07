@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StatusReserva = exports.TipoCama = exports.StatusQuarto = exports.TipoQuarto = void 0;
 /**
- * Tipos de quarto disponíveis no hotel.
+ * Enums definem valores conhecidos em tempo de compilação.
+ * Decisão: string enum (BASICO = 'BASICO') para serialização JSON/API sem conversão.
  */
 var TipoQuarto;
 (function (TipoQuarto) {

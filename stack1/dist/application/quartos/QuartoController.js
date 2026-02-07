@@ -6,8 +6,16 @@ const HttpErrorHandler_1 = require("../common/HttpErrorHandler");
 const BAD_REQUEST = 400;
 const NOT_FOUND = 404;
 /**
- * Controller REST para quartos.
- * Responsabilidade única: adaptar HTTP ↔ aplicação.
+ * Controller REST para quartos (Adapter / Presenter).
+ *
+ * Decisão: Controller apenas adapta HTTP (req/res) para chamadas ao Service.
+ * Não contém regras de negócio — apenas parseia params, chama Service e formata resposta.
+ *
+ * Decisão: handleDomainError centraliza mapeamento exceção→HTTP. Evita try/catch
+ * repetido com lógica de status em cada método.
+ *
+ * Decisão: parseId e parseStatus retornam null em caso de erro e já enviam resposta.
+ * Permite early return (if (id === null) return) e mantém o fluxo linear.
  */
 class QuartoController {
     constructor(service, mapper) {
@@ -82,6 +90,7 @@ class QuartoController {
             }
         };
     }
+    /** Parseia id da URL; envia 400 e retorna null se inválido */
     parseId(param, res) {
         const id = parseInt(param, 10);
         if (isNaN(id)) {
@@ -90,6 +99,7 @@ class QuartoController {
         }
         return id;
     }
+    /** Valida e parseia status do body; envia 400 e retorna null se inválido */
     parseStatus(status, res) {
         const statuses = Object.values(enums_1.StatusQuarto);
         if (typeof status === 'string' && statuses.includes(status)) {

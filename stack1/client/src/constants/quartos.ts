@@ -1,6 +1,9 @@
 import type { TipoQuarto, StatusQuarto, TipoCama } from '../types/quartos';
 
-/** Labels para exibição (DRY - única fonte de verdade) */
+/**
+ * Constantes centralizadas para labels e opções de select (DRY).
+ * Decisão: TIPO_QUARTO_LABELS é fonte única; TIPOS_QUARTO_OPTIONS deriva para formulários.
+ */
 export const TIPO_QUARTO_LABELS: Record<TipoQuarto, string> = {
   BASICO: 'Básico',
   MODERNO: 'Moderno',

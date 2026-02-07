@@ -4,6 +4,12 @@ exports.Quarto = void 0;
 const enums_1 = require("./enums");
 /**
  * Representa um quarto do hotel.
+ *
+ * Decisão: "status" é mutável (não readonly) porque alterarStatus() modifica o estado.
+ * Os demais campos são readonly — imutabilidade parcial ajuda a evitar efeitos colaterais.
+ *
+ * Decisão: alterarStatus() modifica in-place; o repositório persiste o objeto.
+ * Alternativa seria retornar novo Quarto (imutável total), mas exigiria mais overhead.
  */
 class Quarto {
     constructor(id, numero, tipo, capacidade, precoDiaria, status, frigobar = false, cafeManhaIncluso = false, arCondicionado = false, tv = false, camas = []) {

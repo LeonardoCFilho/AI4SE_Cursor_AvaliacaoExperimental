@@ -14,7 +14,11 @@ const quartos_routes_1 = require("./application/quartos/quartos.routes");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-// Composição de dependências (DIP)
+/*
+ * Composição de raiz (Composition Root) — DIP.
+ * Decisão: Construção manual aqui. Para projetos maiores, considerar container IoC.
+ * Ordem: Infra → Application (Repository → Service → Controller).
+ */
 const quartoRepo = new QuartoRepositoryEmMemoria_1.QuartoRepositoryEmMemoria();
 const quartoMapper = new QuartoMapper_1.QuartoMapper();
 const quartoValidator = new QuartoValidator_1.QuartoValidator();

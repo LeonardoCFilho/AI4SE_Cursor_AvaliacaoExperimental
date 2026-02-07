@@ -4,8 +4,16 @@ exports.QuartoRepositoryEmMemoria = void 0;
 const quarto_1 = require("../../domain/quarto");
 const cama_1 = require("../../domain/cama");
 /**
- * Implementação em memória do repositório de quartos.
- * Depende apenas da interface IQuartoRepository (DIP).
+ * Implementação em memória do repositório (DIP — implementa a porta).
+ *
+ * Decisão: Persistência em Map para desenvolvimento e testes. Pode ser substituída
+ * por QuartoRepositoryPostgres sem alterar Service (LSP).
+ *
+ * Decisão: save() — id=0 indica criação; gera novo id e id de camas. Para update,
+ * preserva ids existentes e gera novos apenas para camas adicionadas (id=0).
+ *
+ * Decisão: findByNumero(numero, excludeId) — excludeId usado na edição para
+ * permitir manter o mesmo número ao editar (unicidade exclui o próprio registro).
  */
 class QuartoRepositoryEmMemoria {
     constructor() {
@@ -30,7 +38,7 @@ class QuartoRepositoryEmMemoria {
         return null;
     }
     async save(quarto) {
-        const isNew = quarto.id === 0;
+        const isNew = quarto.id === 0; // Convenção: id=0 = criação
         const id = isNew ? this.nextId++ : quarto.id;
         const camas = quarto.camas.map((c) => {
             const camaId = c.id > 0 ? c.id : this.nextCamaId++;

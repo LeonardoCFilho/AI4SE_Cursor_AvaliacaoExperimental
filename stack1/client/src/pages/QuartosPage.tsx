@@ -4,6 +4,10 @@ import type { QuartoDto, QuartoListagemDto } from '../types/quartos';
 import { QuartoForm } from '../components/QuartoForm';
 import { TIPO_QUARTO_LABELS, TIPO_CAMA_LABELS, STATUS_QUARTO_OPTIONS } from '../constants/quartos';
 
+/**
+ * Página de gestão de quartos. Orquestra listagem, formulário e ações.
+ * Decisão: editingId + quartoParaEditar — ao clicar editar, carrega dados em paralelo ao exibir form.
+ */
 export function QuartosPage() {
   const [quartos, setQuartos] = useState<QuartoListagemDto[]>([]);
   const [carregando, setCarregando] = useState(true);

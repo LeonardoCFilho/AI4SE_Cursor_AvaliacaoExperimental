@@ -2,6 +2,12 @@ import { TipoQuarto, StatusQuarto } from './enums';
 import { Cama } from './cama';
 /**
  * Representa um quarto do hotel.
+ *
+ * Decisão: "status" é mutável (não readonly) porque alterarStatus() modifica o estado.
+ * Os demais campos são readonly — imutabilidade parcial ajuda a evitar efeitos colaterais.
+ *
+ * Decisão: alterarStatus() modifica in-place; o repositório persiste o objeto.
+ * Alternativa seria retornar novo Quarto (imutável total), mas exigiria mais overhead.
  */
 export declare class Quarto {
     readonly id: number;

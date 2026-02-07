@@ -1,3 +1,4 @@
+/** Tipos espelhados do backend para tipagem no frontend */
 export type TipoQuarto = 'BASICO' | 'MODERNO' | 'LUXO';
 export type StatusQuarto = 'LIVRE' | 'OCUPADO' | 'MANUTENCAO_LIMPEZA';
 export type TipoCama = 'SOLTEIRO' | 'CASAL_KING' | 'CASAL_QUEEN';

@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import type { QuartoDto, TipoQuarto, StatusQuarto, TipoCama, CamaDto } from '../types/quartos';
 import { TIPOS_QUARTO_OPTIONS, STATUS_QUARTO_OPTIONS, TIPOS_CAMA_OPTIONS } from '../constants/quartos';
 
+/**
+ * Formulário de cadastro/edição de quarto. Controlado (estado interno).
+ * Decisão: initial carrega dados via useEffect — evita prop drilling de estado de edição.
+ */
 interface QuartoFormProps {
   initial?: QuartoDto | null;
   onSubmit: (dto: QuartoDto) => Promise<void>;

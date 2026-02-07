@@ -1,6 +1,7 @@
 import { TipoCama } from './enums';
 /**
- * Representa uma cama no quarto.
+ * Valor-objeto que representa uma cama. quartoId opcional — útil quando a cama
+ * ainda não foi persistida (criação). Após save, o repositório preenche.
  */
 export declare class Cama {
     readonly id: number;

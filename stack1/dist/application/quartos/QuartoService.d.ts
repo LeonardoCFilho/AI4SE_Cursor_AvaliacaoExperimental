@@ -5,8 +5,16 @@ import { StatusQuarto } from '../../domain/enums';
 import { QuartoMapper } from './QuartoMapper';
 import { QuartoValidator } from './QuartoValidator';
 /**
- * Casos de uso do módulo de quartos.
- * Orquestra validação, repositório e mapeamento (SRP por caso de uso).
+ * Casos de uso do módulo de quartos (Application Service / Use Case).
+ *
+ * Decisão: Service orquestra validação, repositório e mapeamento. Não contém lógica
+ * de persistência nem de conversão — delega a Validator, Repository e Mapper.
+ *
+ * Decisão: Injeção de dependências no construtor (DIP). Facilita testes unitários
+ * com mocks de repositório, validator e mapper.
+ *
+ * Decisão: ensureNumeroUnico() é regra de negócio (RF-04.5) — fica no Service,
+ * não no Validator. Validator trata formato; Service trata unicidade (requer I/O).
  */
 export declare class QuartoService {
     private readonly repository;

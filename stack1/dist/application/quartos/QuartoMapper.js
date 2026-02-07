@@ -6,7 +6,12 @@ const cama_1 = require("../../domain/cama");
 const enums_1 = require("../../domain/enums");
 /**
  * Mapeamento entre entidades de domínio e DTOs (SRP).
- * Única responsabilidade: conversão de formato.
+ *
+ * Decisão: Mapper centraliza conversão. Evita que Controller e Service conheçam
+ * a estrutura interna de Quarto/Cama. Se a API mudar (ex.: snake_case), altera só aqui.
+ *
+ * Decisão: toDomain(dto, id) — id vem do Service (0 para create, dto.id para update).
+ * O repositório usa id=0 para detectar criação e gerar novo id.
  */
 class QuartoMapper {
     toDomain(dto, id) {
@@ -41,7 +46,12 @@ class QuartoMapper {
     camaToDto(cama) {
         return { id: cama.id, tipo: cama.tipo };
     }
-    /** Cria cópia do quarto com novo status (Quarto é parcialmente imutável). */
+    /**
+     * Cria cópia do quarto com novo status.
+     * Decisão: Quarto.status é mutável in-place, mas alterarStatus no Service alteraria
+     * o objeto antes de persistir. Criar novo Quarto garante que o repositório receba
+     * o estado correto (evita efeitos colaterais em alterarStatus do domínio).
+     */
     cloneWithStatus(quarto, status) {
         return new quarto_1.Quarto(quarto.id, quarto.numero, quarto.tipo, quarto.capacidade, quarto.precoDiaria, status, quarto.frigobar, quarto.cafeManhaIncluso, quarto.arCondicionado, quarto.tv, quarto.camas);
     }

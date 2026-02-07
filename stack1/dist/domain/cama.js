@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cama = void 0;
 /**
- * Representa uma cama no quarto.
+ * Valor-objeto que representa uma cama. quartoId opcional — útil quando a cama
+ * ainda não foi persistida (criação). Após save, o repositório preenche.
  */
 class Cama {
     constructor(id, tipo, quartoId) {
