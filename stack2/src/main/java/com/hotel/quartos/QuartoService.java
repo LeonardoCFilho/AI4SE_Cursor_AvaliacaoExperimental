@@ -6,7 +6,9 @@ import java.util.List;
 
 /**
  * Contrato do serviço de quartos (DIP).
- * Dependências devem depender desta abstração, não da implementação.
+ *
+ * Decisão: Interface expõe apenas os casos de uso necessários aos controllers.
+ * Implementação (QuartoServiceImpl) pode ser trocada ou mockada em testes sem alterar dependentes.
  */
 public interface QuartoService {
 

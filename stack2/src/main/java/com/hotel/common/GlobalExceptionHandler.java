@@ -12,7 +12,11 @@ import java.util.stream.Collectors;
 
 /**
  * Tratamento global de exceções (SRP).
- * O Controller foca em HTTP; este handler centraliza o mapeamento exceção → resposta.
+ *
+ * Decisão: Controller foca em HTTP; este handler centraliza exceção → status HTTP + body.
+ * Evita try/catch repetido em cada controller e garante formato consistente de erro.
+ *
+ * Decisão: @RestControllerAdvice — aplica-se a todos os controllers sem configuração extra.
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -31,6 +35,7 @@ public class GlobalExceptionHandler {
                 .body(Map.of(CAMPO_ERRO, ex.getMessage()));
     }
 
+    /** Decisão: formata erros de Bean Validation (@Valid) em lista legível para o cliente. */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidation(MethodArgumentNotValidException ex) {
         List<String> erros = ex.getBindingResult().getFieldErrors().stream()

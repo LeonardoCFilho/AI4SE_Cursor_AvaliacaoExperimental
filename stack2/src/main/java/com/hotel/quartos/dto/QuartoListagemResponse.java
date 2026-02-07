@@ -8,7 +8,9 @@ import java.util.List;
 
 /**
  * DTO de listagem: número, tipo, preço por diária, disponibilidade, camas.
- * Conversão feita por QuartoMapper.
+ *
+ * Decisão: DTO dedicado para listagem — não inclui capacidade nem comodidades (RF-01.3).
+ * Subset de QuartoResponse; evita expor dados desnecessários na tabela.
  */
 public record QuartoListagemResponse(
         Long id,

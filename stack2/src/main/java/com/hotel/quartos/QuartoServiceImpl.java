@@ -13,9 +13,12 @@ import java.util.List;
 
 /**
  * Implementação do serviço de quartos.
- * SRP: Orquestra validação, repositório e mapeamento.
+ * SRP: Orquestra validação, repositório e mapeamento; não contém lógica de persistência nem conversão.
  * RF-01: Cadastro, edição, listagem, alteração de status.
  * RF-04.5: Unicidade do número do quarto.
+ *
+ * Decisão: Injeção de dependências no construtor — Repository e Mapper são interfaces/abstrações.
+ * Facilita testes unitários com mocks e segue DIP.
  */
 @Service
 public class QuartoServiceImpl implements QuartoService {
@@ -28,6 +31,7 @@ public class QuartoServiceImpl implements QuartoService {
         this.mapper = mapper;
     }
 
+    /** Decisão: readOnly = true — operação de leitura; otimiza contexto JPA e evita dirty checking. */
     @Override
     @Transactional(readOnly = true)
     public List<QuartoListagemResponse> listar() {
@@ -73,6 +77,10 @@ public class QuartoServiceImpl implements QuartoService {
                 .orElseThrow(() -> new QuartoNaoEncontradoException(id));
     }
 
+    /**
+     * RF-04.5: Garante unicidade do número do quarto.
+     * Decisão: excludeId permite edição — ao editar quarto X, o número pode permanecer igual ao de X.
+     */
     private void validarNumeroUnico(String numero, Long excludeId) {
         boolean existe = excludeId != null
                 ? repository.existsByNumeroAndIdNot(numero, excludeId)
@@ -94,6 +102,10 @@ public class QuartoServiceImpl implements QuartoService {
         return quarto;
     }
 
+    /**
+     * Decisão: substituirCamas remove todas e adiciona novas — evita lógica de diff (adicionar/remover).
+     * orphanRemoval na entidade Quarto garante que camas antigas sejam deletadas automaticamente.
+     */
     private void atualizarQuarto(Quarto quarto, QuartoRequest request) {
         quarto.setNumero(request.numero().trim());
         quarto.setTipo(request.tipo());
@@ -107,6 +119,7 @@ public class QuartoServiceImpl implements QuartoService {
         );
     }
 
+    /** Decisão: método extraído para evitar duplicação entre cadastrar e editar (DRY). */
     private void aplicarComodidades(Quarto quarto, QuartoRequest request) {
         quarto.setStatus(request.getStatusOrDefault());
         quarto.setFrigobar(request.getFrigobarOrDefault());

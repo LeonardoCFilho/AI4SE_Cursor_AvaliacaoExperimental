@@ -12,12 +12,21 @@ import java.util.List;
 /**
  * Controller REST para Gestão de Quartos.
  * RF-01: Cadastro, edição, listagem, alteração de status.
+ *
+ * Decisão: Controller apenas adapta HTTP (request/response) para chamadas ao Service.
+ * Não contém regras de negócio — apenas delega e formata resposta.
+ *
+ * Decisão: DIP — depende da interface QuartoService, não da implementação.
+ * Facilita testes unitários com mocks e permite trocar implementação sem alterar o controller.
+ *
+ * Decisão: Tratamento de exceções em GlobalExceptionHandler (@RestControllerAdvice).
+ * Evita try/catch repetido e mantém o controller enxuto.
  */
 @RestController
 @RequestMapping("/quartos")
 public class QuartoController {
 
-    private final QuartoService service;  // DIP: depende da abstração
+    private final QuartoService service;
 
     public QuartoController(QuartoService service) {
         this.service = service;
@@ -42,6 +51,7 @@ public class QuartoController {
 
     /**
      * Cadastra um novo quarto.
+     * Decisão: @Valid aciona Bean Validation antes do método; erros tratados por GlobalExceptionHandler.
      */
     @PostMapping
     public ResponseEntity<QuartoResponse> cadastrar(@Valid @RequestBody QuartoRequest request) {
@@ -63,6 +73,7 @@ public class QuartoController {
 
     /**
      * Altera o status de disponibilidade do quarto.
+     * Decisão: DTO dedicado (StatusAlteracaoRequest) em vez de Map — validação via @NotNull no enum.
      */
     @PatchMapping("/{id}/status")
     public ResponseEntity<QuartoResponse> alterarStatus(

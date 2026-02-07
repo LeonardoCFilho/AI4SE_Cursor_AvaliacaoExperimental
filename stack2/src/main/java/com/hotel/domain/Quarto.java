@@ -14,6 +14,10 @@ import java.util.Objects;
  * RF-01.1: número, capacidade, tipo, preço por diária, comodidades.
  * RF-04.1: Impedir reserva de quarto ocupado ou em manutenção/limpeza.
  * RF-04.5: Unicidade do número do quarto.
+ *
+ * Decisão: Enumerated(STRING) — serialização legível em JSON e banco; evita quebra ao adicionar novos valores.
+ * Decisão: orphanRemoval = true — ao remover cama da lista, a entidade é deletada do banco.
+ * Decisão: getCamas retorna unmodifiableList — evita que código externo altere a coleção sem passar pelo domínio.
  */
 @Entity
 @Table(name = "quarto", uniqueConstraints = @UniqueConstraint(columnNames = "numero"))
@@ -55,6 +59,7 @@ public class Quarto {
     @OneToMany(mappedBy = "quarto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cama> camas = new ArrayList<>();
 
+    /** JPA exige construtor sem arg; protected evita uso acidental fora do framework. */
     protected Quarto() {
     }
 
@@ -95,7 +100,7 @@ public class Quarto {
 
     /**
      * Substitui todas as camas pelas novas (para edição).
-     * Usado pelo Service ao editar quarto.
+     * Decisão: clear + adicionarCama — mantém bidirecionalidade (cama.setQuarto) e dispara orphanRemoval.
      */
     public void substituirCamas(List<Cama> novasCamas) {
         camas.clear();
@@ -186,6 +191,10 @@ public class Quarto {
         return Collections.unmodifiableList(camas);
     }
 
+    /**
+     * Decisão: equals/hashCode por id — entidades JPA usam identidade de negócio.
+     * id != null evita que entidades não persistidas sejam iguais se id for null.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

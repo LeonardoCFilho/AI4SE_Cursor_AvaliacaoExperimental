@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO para cama (request/response).
+ *
+ * Decisão: id opcional — no cadastro a cama ainda não existe; na resposta o id vem do banco.
+ * Decisão: factory of() — CamaDto.of(tipo) para request; CamaDto.of(id, tipo) para response.
  */
 public record CamaDto(
         Long id,

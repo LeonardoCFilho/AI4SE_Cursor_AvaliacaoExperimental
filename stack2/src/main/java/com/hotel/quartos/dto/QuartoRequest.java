@@ -10,6 +10,10 @@ import java.util.Optional;
 
 /**
  * DTO para cadastro e edição de quarto.
+ *
+ * Decisão: Campos opcionais (status, comodidades, camas) — cadastro pode omitir; getXOrDefault aplica padrão.
+ * Decisão: Boolean.TRUE.equals(x) para comodidades — trata null como false sem NPE.
+ * Decisão: List<@Valid CamaDto> — validação em cascata; cada cama é validada.
  */
 public record QuartoRequest(
         @NotBlank(message = "Número do quarto é obrigatório")
@@ -36,10 +40,12 @@ public record QuartoRequest(
         List<@Valid CamaDto> camas
 ) {
 
+    /** Decisão: status null → LIVRE (padrão para novo quarto). */
     public StatusQuarto getStatusOrDefault() {
         return Optional.ofNullable(status).orElse(StatusQuarto.LIVRE);
     }
 
+    /** Decisão: Boolean.TRUE.equals evita NPE quando frigobar é null. */
     public boolean getFrigobarOrDefault() {
         return Boolean.TRUE.equals(frigobar);
     }
@@ -56,6 +62,7 @@ public record QuartoRequest(
         return Boolean.TRUE.equals(tv);
     }
 
+    /** Decisão: camas null ou omitido → lista vazia; evita tratamento especial no Service. */
     public List<CamaDto> getCamasOrDefault() {
         return Optional.ofNullable(camas).orElse(List.of());
     }

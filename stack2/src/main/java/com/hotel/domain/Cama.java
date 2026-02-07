@@ -7,6 +7,9 @@ import java.util.Objects;
 /**
  * Representa uma cama em um quarto.
  * RF-01.2: Cadastrar camas com tipo (Solteiro, Casal King, Casal Queen).
+ *
+ * Decisão: FetchType.LAZY — Quarto não carrega camas até acessar; evita N+1 em listagens quando não precisa.
+ * Decisão: ManyToOne com JoinColumn — Cama é dona do relacionamento (possui quarto_id).
  */
 @Entity
 @Table(name = "cama")

@@ -7,7 +7,10 @@ import java.util.Optional;
 
 /**
  * Repositório JPA para Quarto.
- * RF-04.5: Unicidade do número do quarto (verificada no Service).
+ * RF-04.5: Unicidade do número do quarto (verificada no Service, não na constraint do banco).
+ *
+ * Decisão: existsByNumeroAndIdNot — usado na edição para permitir que o quarto mantenha
+ * seu próprio número (excluir o id atual da verificação de duplicidade).
  */
 public interface QuartoRepository extends JpaRepository<Quarto, Long> {
 

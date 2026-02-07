@@ -10,7 +10,11 @@ import java.util.List;
 
 /**
  * Responsável pela conversão Quarto ↔ DTOs (SRP).
- * Centraliza o mapeamento; alterações na API não afetam o domínio.
+ *
+ * Decisão: Mapper centraliza conversão. DTOs permanecem estruturas puras (records).
+ * Alterações na API (ex.: snake_case, novos campos) não afetam o domínio.
+ *
+ * Decisão: mapearCamas extraído — evita duplicação entre toResponse e toListagemResponse.
  */
 @Component
 public class QuartoMapper {

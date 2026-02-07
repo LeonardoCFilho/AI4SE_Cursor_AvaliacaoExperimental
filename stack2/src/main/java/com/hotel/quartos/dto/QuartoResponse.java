@@ -8,7 +8,9 @@ import java.util.List;
 
 /**
  * DTO de resposta completo para quarto (cadastro/edição).
- * Conversão feita por QuartoMapper.
+ *
+ * Decisão: Record imutável — garante consistência; conversão delegada ao QuartoMapper.
+ * Decisão: Inclui todas as comodidades — resposta completa para tela de edição.
  */
 public record QuartoResponse(
         Long id,
