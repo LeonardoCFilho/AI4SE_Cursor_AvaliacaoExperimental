@@ -1,23 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { QuartoDto, TipoQuarto, StatusQuarto, TipoCama, CamaDto } from '../types/quartos';
-
-const TIPOS_QUARTO: { value: TipoQuarto; label: string }[] = [
-  { value: 'BASICO', label: 'Básico' },
-  { value: 'MODERNO', label: 'Moderno' },
-  { value: 'LUXO', label: 'Luxo' },
-];
-
-const STATUS_QUARTO: { value: StatusQuarto; label: string }[] = [
-  { value: 'LIVRE', label: 'Livre' },
-  { value: 'OCUPADO', label: 'Ocupado' },
-  { value: 'MANUTENCAO_LIMPEZA', label: 'Manutenção e Limpeza' },
-];
-
-const TIPOS_CAMA: { value: TipoCama; label: string }[] = [
-  { value: 'SOLTEIRO', label: 'Solteiro' },
-  { value: 'CASAL_KING', label: 'Casal King' },
-  { value: 'CASAL_QUEEN', label: 'Casal Queen' },
-];
+import { TIPOS_QUARTO_OPTIONS, STATUS_QUARTO_OPTIONS, TIPOS_CAMA_OPTIONS } from '../constants/quartos';
 
 interface QuartoFormProps {
   initial?: QuartoDto | null;
@@ -122,7 +105,7 @@ export function QuartoForm({ initial, onSubmit, onCancel }: QuartoFormProps) {
             onChange={(e) => setTipo(e.target.value as TipoQuarto)}
             className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500"
           >
-            {TIPOS_QUARTO.map((t) => (
+            {TIPOS_QUARTO_OPTIONS.map((t) => (
               <option key={t.value} value={t.value}>{t.label}</option>
             ))}
           </select>
@@ -156,7 +139,7 @@ export function QuartoForm({ initial, onSubmit, onCancel }: QuartoFormProps) {
               onChange={(e) => setStatus(e.target.value as StatusQuarto)}
               className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500"
             >
-              {STATUS_QUARTO.map((s) => (
+              {STATUS_QUARTO_OPTIONS.map((s) => (
                 <option key={s.value} value={s.value}>{s.label}</option>
               ))}
             </select>
@@ -208,7 +191,7 @@ export function QuartoForm({ initial, onSubmit, onCancel }: QuartoFormProps) {
                   onChange={(e) => updateCama(idx, e.target.value as TipoCama)}
                   className="flex-1 px-3 py-2 border border-slate-300 rounded-lg"
                 >
-                  {TIPOS_CAMA.map((t) => (
+                  {TIPOS_CAMA_OPTIONS.map((t) => (
                     <option key={t.value} value={t.value}>{t.label}</option>
                   ))}
                 </select>

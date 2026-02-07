@@ -2,18 +2,7 @@ import { useState, useEffect } from 'react';
 import { listarQuartos, obterQuarto, cadastrarQuarto, editarQuarto, alterarStatusQuarto } from '../api/quartos';
 import type { QuartoDto, QuartoListagemDto } from '../types/quartos';
 import { QuartoForm } from '../components/QuartoForm';
-
-const TIPO_LABEL: Record<string, string> = {
-  BASICO: 'Básico',
-  MODERNO: 'Moderno',
-  LUXO: 'Luxo',
-};
-
-const TIPO_CAMA_LABEL: Record<string, string> = {
-  SOLTEIRO: 'Solteiro',
-  CASAL_KING: 'Casal King',
-  CASAL_QUEEN: 'Casal Queen',
-};
+import { TIPO_QUARTO_LABELS, TIPO_CAMA_LABELS, STATUS_QUARTO_OPTIONS } from '../constants/quartos';
 
 export function QuartosPage() {
   const [quartos, setQuartos] = useState<QuartoListagemDto[]>([]);
@@ -149,7 +138,7 @@ export function QuartosPage() {
                   {quartos.map((q) => (
                     <tr key={q.id} className="border-t border-slate-100 hover:bg-slate-50/50">
                       <td className="px-6 py-4 font-medium text-slate-800">{q.numero}</td>
-                      <td className="px-6 py-4 text-slate-700">{TIPO_LABEL[q.tipo] ?? q.tipo}</td>
+                      <td className="px-6 py-4 text-slate-700">{TIPO_QUARTO_LABELS[q.tipo] ?? q.tipo}</td>
                       <td className="px-6 py-4 text-slate-700">
                         {q.precoDiaria.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                       </td>
@@ -159,9 +148,9 @@ export function QuartosPage() {
                           onChange={(e) => handleStatusChange(q.id, e.target.value)}
                           className="text-sm border border-slate-300 rounded px-2 py-1 bg-white cursor-pointer"
                         >
-                          <option value="LIVRE">Livre</option>
-                          <option value="OCUPADO">Ocupado</option>
-                          <option value="MANUTENCAO_LIMPEZA">Manutenção e Limpeza</option>
+                          {STATUS_QUARTO_OPTIONS.map((opt) => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                          ))}
                         </select>
                       </td>
                       <td className="px-6 py-4">
@@ -172,7 +161,7 @@ export function QuartosPage() {
                                 key={i}
                                 className="inline-block px-2 py-0.5 text-xs bg-sky-100 text-sky-800 rounded"
                               >
-                                {TIPO_CAMA_LABEL[c.tipo] ?? c.tipo}
+                                {TIPO_CAMA_LABELS[c.tipo] ?? c.tipo}
                               </span>
                             ))
                           ) : (

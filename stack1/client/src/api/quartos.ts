@@ -1,45 +1,31 @@
 import type { QuartoDto, QuartoListagemDto } from '../types/quartos';
+import { fetchApi } from './httpClient';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 
-export async function listarQuartos(): Promise<QuartoListagemDto[]> {
-  const res = await fetch(`${API_URL}/quartos`);
-  if (!res.ok) throw new Error(await res.json().then((d) => d.erro || 'Erro ao listar'));
-  return res.json();
-}
+export const listarQuartos = () =>
+  fetchApi<QuartoListagemDto[]>(`${API_URL}/quartos`, undefined, 'Erro ao listar quartos');
 
-export async function obterQuarto(id: number): Promise<QuartoDto> {
-  const res = await fetch(`${API_URL}/quartos/${id}`);
-  if (!res.ok) throw new Error(await res.json().then((d) => d.erro || 'Erro ao obter'));
-  return res.json();
-}
+export const obterQuarto = (id: number) =>
+  fetchApi<QuartoDto>(`${API_URL}/quartos/${id}`, undefined, 'Erro ao obter quarto');
 
-export async function cadastrarQuarto(dto: QuartoDto): Promise<QuartoDto> {
-  const res = await fetch(`${API_URL}/quartos`, {
+export const cadastrarQuarto = (dto: QuartoDto) =>
+  fetchApi<QuartoDto>(`${API_URL}/quartos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(dto),
-  });
-  if (!res.ok) throw new Error(await res.json().then((d) => d.erro || 'Erro ao cadastrar'));
-  return res.json();
-}
+  }, 'Erro ao cadastrar quarto');
 
-export async function editarQuarto(id: number, dto: QuartoDto): Promise<QuartoDto> {
-  const res = await fetch(`${API_URL}/quartos/${id}`, {
+export const editarQuarto = (id: number, dto: QuartoDto) =>
+  fetchApi<QuartoDto>(`${API_URL}/quartos/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(dto),
-  });
-  if (!res.ok) throw new Error(await res.json().then((d) => d.erro || 'Erro ao editar'));
-  return res.json();
-}
+  }, 'Erro ao editar quarto');
 
-export async function alterarStatusQuarto(id: number, status: string): Promise<QuartoDto> {
-  const res = await fetch(`${API_URL}/quartos/${id}/status`, {
+export const alterarStatusQuarto = (id: number, status: string) =>
+  fetchApi<QuartoDto>(`${API_URL}/quartos/${id}/status`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ status }),
-  });
-  if (!res.ok) throw new Error(await res.json().then((d) => d.erro || 'Erro ao alterar status'));
-  return res.json();
-}
+  }, 'Erro ao alterar status');

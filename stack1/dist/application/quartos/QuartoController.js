@@ -2,114 +2,101 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QuartoController = void 0;
 const enums_1 = require("../../domain/enums");
+const HttpErrorHandler_1 = require("../common/HttpErrorHandler");
+const BAD_REQUEST = 400;
+const NOT_FOUND = 404;
+/**
+ * Controller REST para quartos.
+ * Responsabilidade única: adaptar HTTP ↔ aplicação.
+ */
 class QuartoController {
-    constructor(service) {
+    constructor(service, mapper) {
         this.service = service;
+        this.mapper = mapper;
         this.listar = async (_req, res) => {
             try {
                 const quartos = await this.service.listar();
                 res.json(quartos);
             }
             catch (err) {
-                res.status(500).json({ erro: err.message });
+                (0, HttpErrorHandler_1.handleDomainError)(err, res);
             }
         };
         this.obterPorId = async (req, res) => {
             try {
-                const id = parseInt(req.params.id, 10);
-                if (isNaN(id)) {
-                    res.status(400).json({ erro: 'ID inválido' });
+                const id = this.parseId(req.params.id, res);
+                if (id === null)
                     return;
-                }
                 const quarto = await this.service.obterPorId(id);
                 if (!quarto) {
-                    res.status(404).json({ erro: 'Quarto não encontrado' });
+                    res.status(NOT_FOUND).json({ erro: 'Quarto não encontrado' });
                     return;
                 }
-                res.json(this.toResponseDto(quarto));
+                res.json(this.mapper.toDto(quarto));
             }
             catch (err) {
-                res.status(500).json({ erro: err.message });
+                (0, HttpErrorHandler_1.handleDomainError)(err, res);
             }
         };
         this.cadastrar = async (req, res) => {
             try {
                 const dto = req.body;
                 const quarto = await this.service.cadastrar(dto);
-                res.status(201).json(this.toResponseDto(quarto));
+                res.status(201).json(this.mapper.toDto(quarto));
             }
             catch (err) {
-                const msg = err.message;
-                if (msg.includes('Já existe') || msg.includes('obrigatório') || msg.includes('deve')) {
-                    res.status(400).json({ erro: msg });
-                }
-                else {
-                    res.status(500).json({ erro: msg });
-                }
+                (0, HttpErrorHandler_1.handleDomainError)(err, res);
             }
         };
         this.editar = async (req, res) => {
             try {
-                const id = parseInt(req.params.id, 10);
-                if (isNaN(id)) {
-                    res.status(400).json({ erro: 'ID inválido' });
+                const id = this.parseId(req.params.id, res);
+                if (id === null)
                     return;
-                }
                 const dto = { ...req.body, id };
                 const quarto = await this.service.editar(dto);
-                res.json(this.toResponseDto(quarto));
+                res.json(this.mapper.toDto(quarto));
             }
             catch (err) {
-                const msg = err.message;
-                if (msg.includes('não encontrado')) {
-                    res.status(404).json({ erro: msg });
-                }
-                else if (msg.includes('Já existe') || msg.includes('obrigatório') || msg.includes('deve')) {
-                    res.status(400).json({ erro: msg });
-                }
-                else {
-                    res.status(500).json({ erro: msg });
-                }
+                (0, HttpErrorHandler_1.handleDomainError)(err, res);
             }
         };
         this.alterarStatus = async (req, res) => {
             try {
-                const id = parseInt(req.params.id, 10);
+                const id = this.parseId(req.params.id, res);
+                if (id === null)
+                    return;
                 const { status } = req.body;
-                if (isNaN(id)) {
-                    res.status(400).json({ erro: 'ID inválido' });
+                const statusValidado = this.parseStatus(status, res);
+                if (!statusValidado)
                     return;
-                }
-                if (!Object.values(enums_1.StatusQuarto).includes(status)) {
-                    res.status(400).json({ erro: 'Status inválido' });
-                    return;
-                }
-                const quarto = await this.service.alterarStatus(id, status);
+                const quarto = await this.service.alterarStatus(id, statusValidado);
                 if (!quarto) {
-                    res.status(404).json({ erro: 'Quarto não encontrado' });
+                    res.status(NOT_FOUND).json({ erro: 'Quarto não encontrado' });
                     return;
                 }
-                res.json(this.toResponseDto(quarto));
+                res.json(this.mapper.toDto(quarto));
             }
             catch (err) {
-                res.status(500).json({ erro: err.message });
+                (0, HttpErrorHandler_1.handleDomainError)(err, res);
             }
         };
     }
-    toResponseDto(quarto) {
-        return {
-            id: quarto.id,
-            numero: quarto.numero,
-            tipo: quarto.tipo,
-            capacidade: quarto.capacidade,
-            precoDiaria: quarto.precoDiaria,
-            status: quarto.status,
-            frigobar: quarto.frigobar,
-            cafeManhaIncluso: quarto.cafeManhaIncluso,
-            arCondicionado: quarto.arCondicionado,
-            tv: quarto.tv,
-            camas: quarto.camas.map((c) => ({ id: c.id, tipo: c.tipo })),
-        };
+    parseId(param, res) {
+        const id = parseInt(param, 10);
+        if (isNaN(id)) {
+            res.status(BAD_REQUEST).json({ erro: 'ID inválido' });
+            return null;
+        }
+        return id;
+    }
+    parseStatus(status, res) {
+        const statuses = Object.values(enums_1.StatusQuarto);
+        if (typeof status === 'string' && statuses.includes(status)) {
+            return status;
+        }
+        res.status(BAD_REQUEST).json({ erro: 'Status inválido' });
+        return null;
     }
 }
 exports.QuartoController = QuartoController;
