@@ -4,7 +4,7 @@ import { QuartoDto, QuartoListagemDto } from './quartos.dto';
 import { StatusQuarto } from '../../domain/enums';
 import { QuartoMapper } from './QuartoMapper';
 import { QuartoValidator } from './QuartoValidator';
-import { NotFoundError, ConflictError } from '../../domain/errors';
+import { NotFoundError, ConflictError, ValidationError } from '../../domain/errors';
 
 /**
  * Casos de uso do módulo de quartos (Application Service / Use Case).
@@ -30,8 +30,12 @@ export class QuartoService {
     return quartos.map((q) => this.mapper.toListagemDto(q));
   }
 
-  async obterPorId(id: number): Promise<Quarto | null> {
-    return this.repository.findById(id);
+  async obterPorId(id: number): Promise<Quarto> {
+    const quarto = await this.repository.findById(id);
+    if (!quarto) {
+      throw new NotFoundError('Quarto não encontrado');
+    }
+    return quarto;
   }
 
   async cadastrar(dto: QuartoDto): Promise<Quarto> {
@@ -39,29 +43,33 @@ export class QuartoService {
     await this.ensureNumeroUnico(dto.numero);
 
     // id=0 indica criação; repositório gera id e persiste
-    const quarto = this.mapper.toDomain(
-      { ...dto, status: dto.status ?? StatusQuarto.LIVRE },
-      0
-    );
+    const quarto = this.mapper.toDomain(dto, 0);
     return this.repository.save(quarto);
   }
 
   async editar(dto: QuartoDto): Promise<Quarto> {
     this.validator.validate(dto, true);
 
-    const existente = await this.repository.findById(dto.id!);
+    const id = dto.id;
+    if (id == null) {
+      throw new ValidationError('ID do quarto é obrigatório para edição');
+    }
+
+    const existente = await this.repository.findById(id);
     if (!existente) {
       throw new NotFoundError('Quarto não encontrado');
     }
-    await this.ensureNumeroUnico(dto.numero, dto.id);
+    await this.ensureNumeroUnico(dto.numero, id);
 
-    const quarto = this.mapper.toDomain(dto, dto.id!);
+    const quarto = this.mapper.toDomain(dto, id);
     return this.repository.save(quarto);
   }
 
-  async alterarStatus(id: number, status: StatusQuarto): Promise<Quarto | null> {
+  async alterarStatus(id: number, status: StatusQuarto): Promise<Quarto> {
     const quarto = await this.repository.findById(id);
-    if (!quarto) return null;
+    if (!quarto) {
+      throw new NotFoundError('Quarto não encontrado');
+    }
 
     const atualizado = this.mapper.cloneWithStatus(quarto, status);
     return this.repository.save(atualizado);

@@ -6,7 +6,6 @@ import { StatusQuarto } from '../../domain/enums';
 import { handleDomainError } from '../common/HttpErrorHandler';
 
 const BAD_REQUEST = 400;
-const NOT_FOUND = 404;
 
 /**
  * Controller REST para quartos (Adapter / Presenter).
@@ -41,10 +40,6 @@ export class QuartoController {
       if (id === null) return;
 
       const quarto = await this.service.obterPorId(id);
-      if (!quarto) {
-        res.status(NOT_FOUND).json({ erro: 'Quarto não encontrado' });
-        return;
-      }
       res.json(this.mapper.toDto(quarto));
     } catch (err) {
       handleDomainError(err, res);
@@ -84,10 +79,6 @@ export class QuartoController {
       if (!statusValidado) return;
 
       const quarto = await this.service.alterarStatus(id, statusValidado);
-      if (!quarto) {
-        res.status(NOT_FOUND).json({ erro: 'Quarto não encontrado' });
-        return;
-      }
       res.json(this.mapper.toDto(quarto));
     } catch (err) {
       handleDomainError(err, res);
